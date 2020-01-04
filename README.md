@@ -49,7 +49,7 @@ Line X: CODE Message
 ```
 Where 
 - `X` is the number of a line where the issue found;
-- `CODE` is an internal code of the stylistic issue;
+- `Code` is the code of the stylistic issue (like `S001`);
 - `Message` is a human-readable description for the issue.
 
 This format will be used throughout the project.
