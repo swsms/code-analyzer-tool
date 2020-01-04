@@ -54,10 +54,12 @@ Where
 
 This format will be used throughout the project.
 
-Your program should find two style issues in this code and output them in the following format:
+Your program should all style issues in this code and output them in the following format:
 ```
 Line 3: S001 Too long line
 Line 5: S001 Too long line
 ```
+The order should always be from the first line to last one.
+
 You can use another message instead of `Too long line`, but everything else should exactly match the example.
 In our code `S001`, `S` means a stylistic issue, and `001` is the internal number of the issue.

@@ -1,6 +1,7 @@
 import subprocess
 
 PATH_TO_SCRIPT = 'analyzer/code_analyzer.py'
+PATH_TO_SAMPLES_DIR = 'tests/samples'
 ENCODING = 'utf-8'
 
 
@@ -13,39 +14,20 @@ def run_script_with_stdin(stdin_as_string) -> str:
 
 
 def test_code_analyzer_when_single_line_without_issues():
-    result = run_script_with_stdin('./tests/samples/single_line_valid_example.py')
+    result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/single_line_valid_example.py')
     assert not result
 
 
 def test_code_analyzer_when_too_long_single_line():
-    result = run_script_with_stdin('./tests/samples/single_long_line_example.py')
+    result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/single_long_line_example.py')
     issues = result.splitlines()
     assert len(issues) == 1
     assert issues[0].startswith('Line 1: S001')
 
 
-test_code_analyzer_when_too_long_single_line()
-#
-# def test_code_analyzer_when_too_long_single_line():
-#     code = "print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!')"
-#     result = run_script_with_stdin(code)
-#     issues = result.splitlines()
-#     assert len(issues) == 1
-#
-#
-# def test_code_analyzer_when_multiple_lines():
-#     code = """print('What\'s your name?')
-#     name = input()\n\n"
-#            "print(f'Hello, {name}')  # here is an obvious comment: this prints greeting with a name\n\n"
-#            "very_big_number = 11_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000\n"
-#            "print(very_big_number)"""
-#
-#     result = run_script_with_stdin(code)
-#     print(result)
-#
-#
-# def pass_multiline_string():
-#     sys.stdin = io.StringIO('print()\n\nprint()')
-#     runpy.run_path(
-#         '../analyzer/code_analyzer.py',
-#     )
+def test_when_multiple_long_lines():
+    result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/multiple_long_lines.py')
+    issues = result.splitlines()
+    assert len(issues) == 2
+    assert issues[0].startswith('Line 3: S001')
+    assert issues[1].startswith('Line 5: S001')
