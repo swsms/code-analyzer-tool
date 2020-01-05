@@ -21,15 +21,16 @@ This will allow you to understand the general ideas of static code analysis and 
 **Prerequisites**: declaring functions, slicing, list comprehensions, while, sorting
 
 At this stage, you need to add five new checks in your program:
-- [S002] Indentation is not a multiple of four 
-- [S003] Unnecessary semicolon after a statement (ignoring semicolons in comments)
-- [S004] At least two spaces before inline comment required
-- [S005] TODO found (ignoring the case, only within a comment) 
-- [S006] More than two blank lines used before this line
+- `[S002]` Indentation is not a multiple of four 
+- `[S003]` Unnecessary semicolon after a statement (note, semicolons are admissible in comments)
+- `[S004]` At least two spaces before inline comment required
+- `[S005]` TODO found (only within comments and the case does not important) 
+- `[S006]` More than two blank lines used before this line (it must be output for the first non-empty line)
 
-All of the checks are consistent with the PEP8 style guide.
+All of the checks are consistent with the PEP8 style guide. 
+See an example below to better understand the checks.
 
-If a line contains the same stylistic issue several times (e.g., [S003], [S005]), 
+If a line contains the same stylistic issue several times (e.g., `[S003]`, `[S005]`), 
 your program must print the information only once. But if a line has issues with different codes, 
 they should be printed in the sorted order.
 
@@ -38,38 +39,42 @@ The path to a file with python code is obtained from the standard input as befor
 It is highly recommended that you break down your program code into a set of small functions.
 Otherwise, your code may confuse others.
 
-Here is an example of the file's content.
+Here is an example of a file with bad code.
 ```
-print('What\'s your name?')
-name = input()
-print(f'Hello, {name}')  # here is an obvious comment: this prints greeting with a name
+print('What\'s your name?') # reading an input
+name = input();
+print(f'Hello, {name}');  # here is an obvious comment: this prints greeting with a name
+
 
 very_big_number = 11_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
 print(very_big_number)
+
+
+
+def some_fun():
+    print('NO TODO HERE;;')
+    pass; # Todo something
 ```
 
-This code contains two long lines (> 79 characters): №3 and №5.
+It contains 9 code style issues.
 
-The general output format is:
 ```
-Line X: Code Message 
-```
-Where 
-- `X` is the number of a line where the issue found, it starts with one;
-- `Code` is the code of the stylistic issue (like `S001`);
-- `Message` is a human-readable description for the issue (optional).
-
-This format will be used throughout the project.
-
-Your program must output the following style issues for the given example:
-```
+Line 1: S004 At least two spaces before inline comment required
+Line 2: S003 Unnecessary semicolon
 Line 3: S001 Too long line
-Line 5: S001 Too long line
+Line 3: S003 Unnecessary semicolon
+Line 6: S001 Too long line
+Line 11: S006 More than two blank lines used before this line
+Line 13: S003 Unnecessary semicolon
+Line 13: S004 At least two spaces before inline comment required
+Line 13: S005 TODO found
 ```
-The order must always be from the first line to last one.
 
-You can use another message instead of `Too long line`, but everything else must exactly match the example.
+The order of stylistic issues must always be from the first to last line.
+
+You can print another `message` instead of our examples (like `Too long line`), 
+but everything else must exactly match the example.
 In our code `S001`, `S` means a stylistic issue, and `001` is the internal number of the issue.
 
-To simplify the solution, we consider it acceptable that your program will find false-positive stylistic issues 
-within multi-line strings ('''...''' and """...""").
+To simplify the solution, we consider it acceptable if your program will find some false-positive stylistic issues 
+within strings, especially multi-lines ('''...''' and """...""").

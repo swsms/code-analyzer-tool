@@ -21,6 +21,7 @@ def test_code_analyzer_when_single_line_without_issues():
 def test_code_analyzer_when_too_long_single_line():
     result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/single_long_line_example.py')
     issues = result.splitlines()
+
     assert len(issues) == 1
     assert issues[0].startswith('Line 1: S001')
 
@@ -28,6 +29,14 @@ def test_code_analyzer_when_too_long_single_line():
 def test_when_multiple_long_lines():
     result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/multiple_long_lines.py')
     issues = result.splitlines()
-    assert len(issues) == 2
-    assert issues[0].startswith('Line 3: S001')
-    assert issues[1].startswith('Line 5: S001')
+
+    assert len(issues) == 9
+    assert issues[0].startswith('Line 1: S004')
+    assert issues[1].startswith('Line 2: S003')
+    assert issues[2].startswith('Line 3: S001')
+    assert issues[3].startswith('Line 3: S003')
+    assert issues[4].startswith('Line 6: S001')
+    assert issues[5].startswith('Line 11: S006')
+    assert issues[6].startswith('Line 13: S003')
+    assert issues[7].startswith('Line 13: S004')
+    assert issues[8].startswith('Line 13: S005')
