@@ -18,15 +18,23 @@ This will allow you to understand the general ideas of static code analysis and 
 
 ## First stage description
 
-Prerequisites: variables, print, input, conditions, loops (for or for + while), split, enumerate(?) 
+**Prerequisites**: variables, print, input, conditions, for, split, enumerate(?), reading files
 
-At the first stage, your program should read python code from the standard input 
-and perform only a single check: lines in the source code must not be longer than 79 characters (PEP8!).
+At the first stage, your program should read python code from a file and perform only a single check: 
+lines in the code must not be longer than 79 characters (PEP8!). 
+The path to a file is obtained from the standard input.
 
-The lines of input source code are separated by \n. We assume, the extra \n are not used in the code (e.g, within strings).
-It's just a simplification to get started. But empty code lines are suitable and should be considered. 
+Here are some examples for different operating systems.
+- Linux or MacOS
+```
+/home/someuser/projects/hello_script.py
+```
+- Windows
+```
+C:\myprojects\hello_script.py
+```
 
-Here is an example:
+Here is an example of the file's content.
 ```
 print('What\'s your name?')
 name = input()
@@ -36,30 +44,25 @@ very_big_number = 11_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
 print(very_big_number)
 ```
 
-This code contains two long lines (> 79 characters): №3 and №5. Line numbers start with one.
+This code contains two long lines (> 79 characters): №3 and №5.
 
-It will be passed to the standard input in the following format with `\n` as line separators:
+The general output format is:
 ```
-print('What\'s your name?')\nname = input()\nprint(f'Hello, {name}')  # here is an obvious comment: this prints greeting with a name\n\nvery_big_number = 11_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000\nprint(very_big_number)
-```
-
-The general output format should be:
-```
-Line X: CODE Message 
+Line X: Code Message 
 ```
 Where 
-- `X` is the number of a line where the issue found;
+- `X` is the number of a line where the issue found, it starts with one;
 - `Code` is the code of the stylistic issue (like `S001`);
-- `Message` is a human-readable description for the issue.
+- `Message` is a human-readable description for the issue (optional).
 
 This format will be used throughout the project.
 
-Your program should all style issues in this code and output them in the following format:
+Your program should output the following style issues for the given example:
 ```
 Line 3: S001 Too long line
 Line 5: S001 Too long line
 ```
-The order should always be from the first line to last one.
+The order must always be from the first line to last one.
 
 You can use another message instead of `Too long line`, but everything else should exactly match the example.
 In our code `S001`, `S` means a stylistic issue, and `001` is the internal number of the issue.
