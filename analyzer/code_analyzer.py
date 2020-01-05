@@ -18,6 +18,8 @@ TODO_CODE_MSG = 'TODO found'
 TOO_MANY_BLANK_LINES_CODE = 'S006'
 TOO_MANY_BLANK_LINES_MSG = 'More than two blank lines used'
 
+COMMENT_SIGN = '#'
+
 #
 #
 # NON ASCII CHARACTER (COLUMN?)
@@ -90,7 +92,7 @@ def has_unnecessary_semicolon(line: str) -> bool:
     line = line.strip()
 
     last_semicolon_index = line.rfind(';')
-    first_comment_sign_index = line.find('#')
+    first_comment_sign_index = line.find(COMMENT_SIGN)
 
     if last_semicolon_index == len(line) - 1:
         if 0 <= first_comment_sign_index < last_semicolon_index:
@@ -106,9 +108,20 @@ def has_unnecessary_semicolon(line: str) -> bool:
     return False
 
 
+def check_enough_spaces_before_comment(line: str) -> bool:
+    first_comment_sign_index = line.find(COMMENT_SIGN)
+    if first_comment_sign_index < 2:
+        return True
+
+    prev_index = first_comment_sign_index - 1
+    preprev_index = first_comment_sign_index - 2
+
+    return line[preprev_index] == ' ' and line[prev_index] == ' '
+
+
 def has_todo_comment(line: str) -> bool:
     todo_index = line.lower().find('todo')
-    comment_sign_index = line.find('#')
+    comment_sign_index = line.find(COMMENT_SIGN)
     return todo_index >= 0 and 0 <= comment_sign_index < todo_index
 
 

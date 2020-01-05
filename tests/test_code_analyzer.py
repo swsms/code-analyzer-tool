@@ -5,7 +5,8 @@ def test_check_line_is_too_long():
     line = "print('hello')"
     assert not check_line_is_too_long(line)
 
-    line = "print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')"
+    line = ("print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')")
     assert check_line_is_too_long(line)
 
 
@@ -51,6 +52,13 @@ def test_has_todo_comment():
     assert not has_todo_comment("print('TODO TODO')")
     assert not has_todo_comment("todo()")
     assert not has_todo_comment("todo = 'todo'")
+    # assert not has_todo_comment("print(' # TODO')") TODO it does not work now
+
+
+def test_check_lines_empty():
+    assert not check_lines_empty([])
+    assert check_lines_empty([' ', ' ', '  '])
+    assert check_lines_empty([''])
 
 
 def test_find_positions_with_too_many_blank_lines():
