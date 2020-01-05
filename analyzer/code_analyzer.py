@@ -7,7 +7,7 @@ INDENTATION_CODE = 'S002'
 INDENTATION_MSG = 'Indentation is not a multiple of four'
 
 UNNECESSARY_SEMICOLON_CODE = 'S003'
-UNNECESSARY_SEMICOLON_MSG = 'The line ends with an unnecessary semicolon'
+UNNECESSARY_SEMICOLON_MSG = 'Unnecessary semicolon'
 
 TWO_SPACES_BEFORE_COMMENT_CODE = 'S004'
 TWO_SPACES_BEFORE_COMMENT_MSG = 'At least two spaces before inline comment required'
@@ -44,7 +44,7 @@ def analyze_code_lines(lines: List[str]) -> List[Tuple[int, str, str]]:
             violations.append((num, UNNECESSARY_SEMICOLON_CODE,
                                UNNECESSARY_SEMICOLON_MSG))
 
-        if find_todo_within_comment(line):
+        if has_todo_comment(line):
             violations.append((num, TODO_CODE, TODO_CODE_MSG))
 
     violations.extend([
@@ -106,7 +106,7 @@ def has_unnecessary_semicolon(line: str) -> bool:
     return False
 
 
-def find_todo_within_comment(line: str) -> bool:
+def has_todo_comment(line: str) -> bool:
     todo_index = line.lower().find('todo')
     comment_sign_index = line.find('#')
     return todo_index >= 0 and 0 <= comment_sign_index < todo_index

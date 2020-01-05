@@ -21,13 +21,17 @@ This will allow you to understand the general ideas of static code analysis and 
 **Prerequisites**: declaring functions, slicing, list comprehensions, while
 
 At this stage, you need to add five new checks in your program:
-- Indentation is not a multiple of four [S002]
-- The line ends with an unnecessary semicolon [S003]
-- At least two spaces before inline comment required [S004]
-- TODO found [S005]
-- More than two blank lines used [S006]
+- [S002] Indentation is not a multiple of four 
+- [S003] Unnecessary semicolon after a statement (ignoring semicolons in comments)
+- [S004] At least two spaces before inline comment required
+- [S005] TODO found (ignoring the case, only within a comment) 
+- [S006] More than two blank lines used
 
 All of the checks are consistent with the PEP8 style guide.
+
+If a line contains the same stylistic issue several times (e.g., [S003], [S005]), 
+your program must print the information only once. But if a line has issues with different codes, 
+they should be printed in the sorted order.
 
 The path to a file with python code is obtained from the standard input as before.
 
