@@ -6,13 +6,13 @@ TOO_LONG_LINE_MSG = 'Too long line'
 INDENTATION_CODE = 'S002'
 INDENTATION_MSG = 'Indentation is not a multiple of four'
 
-END_NEW_LINE_MISSING_CODE = 'S003'
-END_NEW_LINE_MISSING_MSG = 'No newline at the end of the file'
+TOO_MANY_BLANK_LINES_CODE = 'S003'
+TOO_MANY_BLANK_LINES_MSG = 'Too many blank lines'
 
-UNNECESSARY_SEMICOLON_CODE = 'S0011'
+UNNECESSARY_SEMICOLON_CODE = 'S011'
 UNNECESSARY_SEMICOLON_MSG = 'The line ends with an unnecessary semicolon'
 
-TODO_CODE = 'S004'
+TODO_CODE = 'S0012'
 TODO_CODE_MSG = 'TODO found'
 
 #
@@ -45,6 +45,7 @@ def analyze_code_lines(lines: List[str]) -> List[Tuple[int, str, str]]:
         if find_todo_within_comment(line):
             violations.append((num, TODO_CODE, TODO_CODE_MSG))
 
+    positions = find_positions_with_too_many_blank_lines(lines)
     return violations
 
 
@@ -67,9 +68,16 @@ def check_indentation_is_not_multiple_of_four(line: str) -> bool:
 def find_positions_with_too_many_blank_lines(lines: List[str]) -> List[int]:
     indexes = []
     for index in range(2, len(lines)):
-        if not (lines[index - 1].strip() or lines[index - 2].strip()):
+        if (not check_lines_empty([lines[index]])
+                and check_lines_empty(lines[index - 3: index])):
             indexes.append(index)
     return indexes
+
+
+def check_lines_empty(lines: List[str]):
+    if not lines:
+        return False
+    return all([not line.strip() for line in lines])
 
 
 def find_all_non_ascii_chars(line: str) -> List[Tuple[int, str]]:
