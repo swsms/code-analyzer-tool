@@ -18,14 +18,14 @@ This will allow you to understand the general ideas of static code analysis and 
 
 ## First stage description
 
-**Prerequisites**: declaring functions, slicing, list comprehensions, while
+**Prerequisites**: declaring functions, slicing, list comprehensions, while, sorting
 
 At this stage, you need to add five new checks in your program:
 - [S002] Indentation is not a multiple of four 
 - [S003] Unnecessary semicolon after a statement (ignoring semicolons in comments)
 - [S004] At least two spaces before inline comment required
 - [S005] TODO found (ignoring the case, only within a comment) 
-- [S006] More than two blank lines used
+- [S006] More than two blank lines used before this line
 
 All of the checks are consistent with the PEP8 style guide.
 

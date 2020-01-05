@@ -16,7 +16,7 @@ TODO_CODE = 'S005'
 TODO_CODE_MSG = 'TODO found'
 
 TOO_MANY_BLANK_LINES_CODE = 'S006'
-TOO_MANY_BLANK_LINES_MSG = 'More than two blank lines used'
+TOO_MANY_BLANK_LINES_MSG = 'More than two blank lines used before this line'
 
 COMMENT_SIGN = '#'
 
@@ -29,7 +29,7 @@ COMMENT_SIGN = '#'
 
 def read_code_lines(file_path: str) -> List[str]:
     with open(file_path, mode='r') as file:
-        return [line.strip() for line in file.readlines()]
+        return [line.rstrip() for line in file.readlines()]
 
 
 def analyze_code_lines(lines: List[str]) -> List[Tuple[int, str, str]]:
@@ -58,6 +58,8 @@ def analyze_code_lines(lines: List[str]) -> List[Tuple[int, str, str]]:
         for position in find_positions_with_too_many_blank_lines(lines)
     ])
 
+    violations.sort(key=lambda violation: [violation[0], violation[1]])
+
     return violations
 
 
@@ -82,7 +84,7 @@ def find_positions_with_too_many_blank_lines(lines: List[str]) -> List[int]:
     for index in range(2, len(lines)):
         if (not check_lines_empty([lines[index]])
                 and check_lines_empty(lines[index - 3: index])):
-            indexes.append(index)
+            indexes.append(index + 1)
     return indexes
 
 
@@ -96,8 +98,10 @@ def has_unnecessary_semicolon(line: str) -> bool:
     line = line.strip()
 
     last_semicolon_index = line.rfind(';')
-    first_comment_sign_index = line.find(COMMENT_SIGN)
+    if last_semicolon_index < 0:
+        return False
 
+    first_comment_sign_index = line.find(COMMENT_SIGN)
     if last_semicolon_index == len(line) - 1:
         if 0 <= first_comment_sign_index < last_semicolon_index:
             return False
