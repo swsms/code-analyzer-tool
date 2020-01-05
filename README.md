@@ -57,12 +57,12 @@ Where
 
 This format will be used throughout the project.
 
-Your program should output the following style issues for the given example:
+Here is an expected output for the given example:
 ```
 Line 3: S001 Too long line
 Line 5: S001 Too long line
 ```
-The order must always be from the first line to last one.
+The order must always be from the first to last line.
 
-You can use another message instead of `Too long line`, but everything else should exactly match the example.
+You can use another `message` instead of `Too long line`, but everything else must exactly match the example.
 In our code `S001`, `S` means a stylistic issue, and `001` is the internal number of the issue.
