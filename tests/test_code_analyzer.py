@@ -29,6 +29,17 @@ def test_check_indentation_is_not_multiple_of_four():
     assert not check_indentation_is_not_multiple_of_four(line)
 
 
+def test_has_unnecessary_semicolon():
+    assert not has_unnecessary_semicolon("print('hello')")
+    assert has_unnecessary_semicolon("print('hello');")
+    assert has_unnecessary_semicolon("print('hello');  ")
+    assert has_unnecessary_semicolon("print('hello'); # hello")
+    assert not has_unnecessary_semicolon("# hello hello hello;")
+    assert not has_unnecessary_semicolon("greeting = 'hello;'")
+    assert not has_unnecessary_semicolon("'Hello; ;#; ;Hello;'")
+    assert not has_unnecessary_semicolon("print('hello')  #;")
+
+
 def test_find_positions_with_too_many_blank_lines():
     lines = [
         "print('hello')"

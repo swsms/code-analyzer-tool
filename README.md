@@ -18,7 +18,7 @@ This will allow you to understand the general ideas of static code analysis and 
 
 ## First stage description
 
-**Prerequisites**: declaring functions, slicing, list comprehensions
+**Prerequisites**: declaring functions, slicing, list comprehensions, while
 
 At this stage, you need to add five new checks in your program:
 - Indentation is not a multiple of four [S002]
@@ -57,12 +57,15 @@ Where
 
 This format will be used throughout the project.
 
-Your program should output the following style issues for the given example:
+Your program must output the following style issues for the given example:
 ```
 Line 3: S001 Too long line
 Line 5: S001 Too long line
 ```
 The order must always be from the first line to last one.
 
-You can use another message instead of `Too long line`, but everything else should exactly match the example.
+You can use another message instead of `Too long line`, but everything else must exactly match the example.
 In our code `S001`, `S` means a stylistic issue, and `001` is the internal number of the issue.
+
+To simplify the solution, we consider it acceptable that your program will find false-positive stylistic issues 
+within multi-line strings ('''...''' and """...""").

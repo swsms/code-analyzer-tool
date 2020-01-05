@@ -87,7 +87,23 @@ def check_lines_empty(lines: List[str]):
 
 
 def has_unnecessary_semicolon(line: str) -> bool:
-    return line.endswith(';')
+    line = line.strip()
+
+    last_semicolon_index = line.rfind(';')
+    first_comment_sign_index = line.find('#')
+
+    if last_semicolon_index == len(line) - 1:
+        if 0 <= first_comment_sign_index < last_semicolon_index:
+            return False
+        return True
+
+    index = last_semicolon_index + 1
+    while index < len(line):
+        if line[index] == '#':
+            return True
+        index += 1
+
+    return False
 
 
 def find_todo_within_comment(line: str) -> bool:
