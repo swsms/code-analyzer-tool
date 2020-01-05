@@ -18,21 +18,21 @@ This will allow you to understand the general ideas of static code analysis and 
 
 ## First stage description
 
-**Prerequisites**: variables, print, input, conditions, for, split, enumerate(?), reading files
+**Prerequisites**: declaring functions, slicing, list comprehensions
 
-At the first stage, your program should read python code from a file and perform only a single check: 
-lines in the code must not be longer than 79 characters (PEP8!). 
-The path to a file is obtained from the standard input.
+At this stage, you need to add five new checks in your program:
+- Indentation is not a multiple of four [S002]
+- The line ends with an unnecessary semicolon [S003]
+- At least two spaces before inline comment required [S004]
+- TODO found [S005]
+- More than two blank lines used [S006]
 
-Here are some examples for different operating systems.
-- Linux or MacOS
-```
-/home/someuser/projects/hello_script.py
-```
-- Windows
-```
-C:\myprojects\hello_script.py
-```
+All of the checks are consistent with the PEP8 style guide.
+
+The path to a file with python code is obtained from the standard input as before.
+
+It is highly recommended that you break down your program code into a set of small functions.
+Otherwise, your code may confuse others.
 
 Here is an example of the file's content.
 ```
