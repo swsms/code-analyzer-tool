@@ -1,33 +1,124 @@
-import subprocess
-
-PATH_TO_SCRIPT = 'analyzer/code_analyzer.py'
-PATH_TO_SAMPLES_DIR = 'tests/samples'
-ENCODING = 'utf-8'
+from analyzer.code_analyzer import *
 
 
-def run_script_with_stdin(stdin_as_string) -> str:
-    process = subprocess.Popen(['python', PATH_TO_SCRIPT],
-                               stdin=subprocess.PIPE,
-                               stdout=subprocess.PIPE)
-    stdout = process.communicate(input=stdin_as_string.encode(ENCODING))[0]
-    return stdout.decode(ENCODING)
+def test_check_line_is_too_long():
+    line = "print('hello')"
+    assert not check_line_is_too_long(line)
+
+    line = ("print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')")
+    assert check_line_is_too_long(line)
 
 
-def test_code_analyzer_when_single_line_without_issues():
-    result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/single_line_valid_example.py')
-    assert not result
+def test_check_indentation_is_not_multiple_of_four():
+    line = "print('hello')"
+    assert not check_indentation_is_not_multiple_of_four(line)
+
+    line = " print('hello')"
+    assert check_indentation_is_not_multiple_of_four(line)
+
+    line = "  print('hello')"
+    assert check_indentation_is_not_multiple_of_four(line)
+
+    line = "    print('hello')"
+    assert not check_indentation_is_not_multiple_of_four(line)
+
+    line = "       print('hello')"
+    assert check_indentation_is_not_multiple_of_four(line)
+
+    line = "        print('hello')"
+    assert not check_indentation_is_not_multiple_of_four(line)
 
 
-def test_code_analyzer_when_too_long_single_line():
-    result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/single_long_line_example.py')
-    issues = result.splitlines()
-    assert len(issues) == 1
-    assert issues[0].startswith('Line 1: S001')
+def test_has_unnecessary_semicolon():
+    assert not has_unnecessary_semicolon("print('hello')")
+    assert has_unnecessary_semicolon("print('hello');")
+    assert has_unnecessary_semicolon("print('hello');  ")
+    assert has_unnecessary_semicolon("print('hello');;;")
+    assert has_unnecessary_semicolon("print('hello');  # hello")
+    assert not has_unnecessary_semicolon("# hello hello hello;")
+    assert not has_unnecessary_semicolon("greeting = 'hello;'")
+    assert not has_unnecessary_semicolon("'Hello; ;#; ;Hello;'")
+    assert not has_unnecessary_semicolon("print('hello')  #;")
 
 
-def test_when_multiple_long_lines():
-    result = run_script_with_stdin(f'{PATH_TO_SAMPLES_DIR}/multiple_long_lines.py')
-    issues = result.splitlines()
-    assert len(issues) == 2
-    assert issues[0].startswith('Line 3: S001')
-    assert issues[1].startswith('Line 5: S001')
+def test_has_todo_comment():
+    assert not has_todo_comment("print('hello')")
+    assert has_todo_comment("print('hello')  # TODO")
+    assert has_todo_comment("print('hello')  # TODO # TODO")
+    assert has_todo_comment("# todo")
+    assert has_todo_comment("# TODO just do it")
+    assert not has_todo_comment("print('todo')")
+    assert not has_todo_comment("print('TODO TODO')")
+    assert not has_todo_comment("todo()")
+    assert not has_todo_comment("todo = 'todo'")
+    # assert not has_todo_comment("print(' # TODO')") TODO it does not work now
+
+
+def test_check_lines_empty():
+    assert not check_lines_empty([])
+    assert check_lines_empty([' ', ' ', '  '])
+    assert check_lines_empty([''])
+
+
+def test_is_inside_singleline_string():
+    assert not is_inside_singleline_string("12345", 3)
+    assert not is_inside_singleline_string("12345", 10)
+    assert not is_inside_singleline_string("12345", 0)
+    assert not is_inside_singleline_string("print(12345)", 10)
+
+    assert is_inside_singleline_string("print('12345')", 10)
+    a = '12313\'sdfdsf\''
+    assert is_inside_singleline_string("print('\'12\'', 3, '45')", 12)
+
+test_is_inside_singleline_string()
+
+def test_check_enough_spaces_before_comment():
+    assert not check_lack_of_spaces_before_comment("# just a comment")
+    assert not check_lack_of_spaces_before_comment("  # just a comment")
+    assert not check_lack_of_spaces_before_comment("print('hello!')")
+    assert not check_lack_of_spaces_before_comment("print('hello!')  #")
+    assert not check_lack_of_spaces_before_comment("print('hello!')  # hello")
+
+    assert check_lack_of_spaces_before_comment("print('hello!') # hello")
+    assert check_lack_of_spaces_before_comment("print('hello!')# hello")
+
+
+def test_find_positions_with_too_many_blank_lines():
+    lines = [
+        "print('hello')"
+    ]
+
+    assert [] == find_positions_with_too_many_blank_lines(lines)
+
+    lines = [
+        "",
+        "",
+        "print('hello')",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "print('hello')"
+    ]
+
+    assert [8] == find_positions_with_too_many_blank_lines(lines)
+
+    lines = [
+        "print('hello')",
+        "",
+        "",
+        "",
+        "",
+        "    print('hello')",
+        "",
+        "",
+        "",
+        "print('hello')",
+        "",
+        "",
+        "print('hello')",
+    ]
+
+    assert [5, 9] == find_positions_with_too_many_blank_lines(lines)
