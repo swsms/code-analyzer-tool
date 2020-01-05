@@ -46,6 +46,10 @@ def analyze_code_lines(lines: List[str]) -> List[Tuple[int, str, str]]:
             violations.append((num, UNNECESSARY_SEMICOLON_CODE,
                                UNNECESSARY_SEMICOLON_MSG))
 
+        if check_lack_of_spaces_before_comment(line):
+            violations.append((num, TWO_SPACES_BEFORE_COMMENT_CODE,
+                               TWO_SPACES_BEFORE_COMMENT_MSG))
+
         if has_todo_comment(line):
             violations.append((num, TODO_CODE, TODO_CODE_MSG))
 
@@ -108,21 +112,41 @@ def has_unnecessary_semicolon(line: str) -> bool:
     return False
 
 
-def check_enough_spaces_before_comment(line: str) -> bool:
+def check_lack_of_spaces_before_comment(line: str) -> bool:
     first_comment_sign_index = line.find(COMMENT_SIGN)
     if first_comment_sign_index < 2:
-        return True
+        return False
 
     prev_index = first_comment_sign_index - 1
     preprev_index = first_comment_sign_index - 2
 
-    return line[preprev_index] == ' ' and line[prev_index] == ' '
+    return line[preprev_index] != ' ' or line[prev_index] != ' '
 
 
 def has_todo_comment(line: str) -> bool:
     todo_index = line.lower().find('todo')
     comment_sign_index = line.find(COMMENT_SIGN)
     return todo_index >= 0 and 0 <= comment_sign_index < todo_index
+
+
+def is_inside_singleline_string(line: str, target_index: int) -> bool:
+    if target_index >= len(line):
+        return False
+
+    current_index = 1
+    inside_single_quotes = False
+    inside_double_quotes = False
+
+    while current_index < target_index:
+        if line[current_index - 1] == '\\':
+            continue
+        if line[current_index] == '\'':
+            inside_single_quotes = not inside_double_quotes
+        elif line[current_index] == '"':
+            inside_double_quotes = not inside_double_quotes
+        current_index += 1
+
+    return inside_single_quotes or inside_double_quotes
 
 
 def print_violations(violations: List[Tuple[int, str, str]]) -> None:

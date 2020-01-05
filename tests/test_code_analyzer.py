@@ -61,6 +61,29 @@ def test_check_lines_empty():
     assert check_lines_empty([''])
 
 
+def test_is_inside_singleline_string():
+    assert not is_inside_singleline_string("12345", 3)
+    assert not is_inside_singleline_string("12345", 10)
+    assert not is_inside_singleline_string("12345", 0)
+    assert not is_inside_singleline_string("print(12345)", 10)
+
+    assert is_inside_singleline_string("print('12345')", 10)
+    a = '12313\'sdfdsf\''
+    assert is_inside_singleline_string("print('\'12\'', 3, '45')", 12)
+
+test_is_inside_singleline_string()
+
+def test_check_enough_spaces_before_comment():
+    assert not check_lack_of_spaces_before_comment("# just a comment")
+    assert not check_lack_of_spaces_before_comment("  # just a comment")
+    assert not check_lack_of_spaces_before_comment("print('hello!')")
+    assert not check_lack_of_spaces_before_comment("print('hello!')  #")
+    assert not check_lack_of_spaces_before_comment("print('hello!')  # hello")
+
+    assert check_lack_of_spaces_before_comment("print('hello!') # hello")
+    assert check_lack_of_spaces_before_comment("print('hello!')# hello")
+
+
 def test_find_positions_with_too_many_blank_lines():
     lines = [
         "print('hello')"
