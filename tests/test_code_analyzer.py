@@ -71,7 +71,6 @@ def test_is_inside_singleline_string():
     a = '12313\'sdfdsf\''
     assert is_inside_singleline_string("print('\'12\'', 3, '45')", 12)
 
-test_is_inside_singleline_string()
 
 def test_check_enough_spaces_before_comment():
     assert not check_lack_of_spaces_before_comment("# just a comment")
@@ -103,7 +102,7 @@ def test_find_positions_with_too_many_blank_lines():
         "print('hello')"
     ]
 
-    assert [8] == find_positions_with_too_many_blank_lines(lines)
+    assert [9] == find_positions_with_too_many_blank_lines(lines)
 
     lines = [
         "print('hello')",
@@ -121,4 +120,4 @@ def test_find_positions_with_too_many_blank_lines():
         "print('hello')",
     ]
 
-    assert [5, 9] == find_positions_with_too_many_blank_lines(lines)
+    assert [6, 10] == find_positions_with_too_many_blank_lines(lines)
