@@ -1,4 +1,10 @@
-from typing import List, Tuple
+from os import path
+from typing import List
+
+from analyzer.utils import (
+    SourceCodeFile, read_file, read_files
+)
+from analyzer.violation import Violation
 
 TOO_LONG_CODE = 'S001'
 TOO_LONG_LINE_MSG = 'Too long line'
@@ -27,38 +33,47 @@ COMMENT_SIGN = '#'
 # check 4 TOO MANY BLANK LINES (3)
 
 
-def read_code_lines(file_path: str) -> List[str]:
-    with open(file_path, mode='r') as file:
-        return [line.rstrip() for line in file.readlines()]
-
-
-def analyze_code_lines(lines: List[str]) -> List[Tuple[int, str, str]]:
+def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
     violations = []
 
+    path = file[0]
+    lines = file[1]
     for (num, line) in enumerate(lines, 1):
         if check_line_is_too_long(line):
-            violations.append((num, TOO_LONG_CODE, TOO_LONG_LINE_MSG))
+            violations.append(
+                Violation(file_path=path, line=num,
+                          code=TOO_LONG_CODE,
+                          text=TOO_LONG_LINE_MSG))
 
         if check_indentation_is_not_multiple_of_four(line):
-            violations.append((num, INDENTATION_CODE, INDENTATION_MSG))
+            violations.append(
+                Violation(file_path=path, line=num,
+                          code=INDENTATION_CODE,
+                          text=INDENTATION_MSG))
 
         if has_unnecessary_semicolon(line):
-            violations.append((num, UNNECESSARY_SEMICOLON_CODE,
-                               UNNECESSARY_SEMICOLON_MSG))
+            violations.append(
+                Violation(file_path=path, line=num,
+                          code=UNNECESSARY_SEMICOLON_CODE,
+                          text=UNNECESSARY_SEMICOLON_MSG))
 
         if check_lack_of_spaces_before_comment(line):
-            violations.append((num, TWO_SPACES_BEFORE_COMMENT_CODE,
-                               TWO_SPACES_BEFORE_COMMENT_MSG))
+            violations.append(
+                Violation(file_path=path, line=num,
+                          code=TWO_SPACES_BEFORE_COMMENT_CODE,
+                          text=TWO_SPACES_BEFORE_COMMENT_MSG))
 
         if has_todo_comment(line):
-            violations.append((num, TODO_CODE, TODO_CODE_MSG))
+            violations.append(
+                Violation(file_path=path, line=num,
+                          code=TODO_CODE, text=TODO_CODE_MSG))
 
     violations.extend([
-        (position, TOO_MANY_BLANK_LINES_CODE, TOO_MANY_BLANK_LINES_MSG)
+        Violation(file_path=path, line=position,
+                  code=TOO_MANY_BLANK_LINES_CODE,
+                  text=TOO_MANY_BLANK_LINES_MSG)
         for position in find_positions_with_too_many_blank_lines(lines)
     ])
-
-    violations.sort(key=lambda violation: [violation[0], violation[1]])
 
     return violations
 
@@ -153,13 +168,37 @@ def is_inside_singleline_string(line: str, target_index: int) -> bool:
     return inside_single_quotes or inside_double_quotes
 
 
-def print_violations(violations: List[Tuple[int, str, str]]) -> None:
+def sort_violations(violations: List[Violation]) -> List[Violation]:
+    return sorted(violations, key=lambda violation: [violation.file_path,
+                                                     violation.line,
+                                                     violation.code])
+
+
+def print_violations(violations: List[Violation]) -> None:
     for violation in violations:
-        print(f'Line {violation[0]}: {violation[1]} {violation[2]}')
+        print(f'{violation.file_path}: Line {violation.line}: '
+              f'{violation.code} {violation.text}')
+
+
+def main():
+    file_path = input()
+    if not path.exists(file_path):
+        print('ERROR: The path does not exist!')
+        return
+
+    if path.isfile(file_path):
+        source_code_files = [read_file(file_path)]
+    else:
+        source_code_files = read_files(file_path)
+
+    violations = []
+    for file in source_code_files:
+        violations.extend(analyze_code_lines(file))
+
+    violations = sort_violations(violations)
+
+    print_violations(violations)
 
 
 if __name__ == '__main__':
-    file_path = input()
-    code_lines = read_code_lines(file_path)
-    violations = analyze_code_lines(code_lines)
-    print_violations(violations)
+    main()

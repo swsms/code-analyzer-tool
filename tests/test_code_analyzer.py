@@ -71,7 +71,6 @@ def test_is_inside_singleline_string():
     a = '12313\'sdfdsf\''
     assert is_inside_singleline_string("print('\'12\'', 3, '45')", 12)
 
-test_is_inside_singleline_string()
 
 def test_check_enough_spaces_before_comment():
     assert not check_lack_of_spaces_before_comment("# just a comment")
