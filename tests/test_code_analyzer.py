@@ -102,7 +102,7 @@ def test_find_positions_with_too_many_blank_lines():
         "print('hello')"
     ]
 
-    assert [8] == find_positions_with_too_many_blank_lines(lines)
+    assert [9] == find_positions_with_too_many_blank_lines(lines)
 
     lines = [
         "print('hello')",
@@ -120,4 +120,4 @@ def test_find_positions_with_too_many_blank_lines():
         "print('hello')",
     ]
 
-    assert [5, 9] == find_positions_with_too_many_blank_lines(lines)
+    assert [6, 10] == find_positions_with_too_many_blank_lines(lines)
