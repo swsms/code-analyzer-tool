@@ -2,7 +2,7 @@ from os import path
 from typing import List
 
 from analyzer.utils import (
-    SourceCodeFile, read_file, read_files
+    SourceCodeFile, read_file, read_python_files
 )
 from analyzer.violation import Violation
 
@@ -189,7 +189,7 @@ def main():
     if path.isfile(file_path):
         source_code_files = [read_file(file_path)]
     else:
-        source_code_files = read_files(file_path)
+        source_code_files = read_python_files(file_path)
 
     violations = []
     for file in source_code_files:

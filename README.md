@@ -16,19 +16,17 @@ They analyze code and output all the found stylistic and some other issues.
 In this project, you will create a small linter which finds some common stylistic issues in python code.
 This will allow you to understand the general ideas of static code analysis and also better understand python itself.
 
-## Second stage description
+## Third stage description
 
-**Prerequisites**: declaring functions, slicing, list comprehensions, while, sorting
+**Prerequisites**: oop, directories
 
-At this stage, you need to add five new checks in your program:
-- `[S002]` Indentation is not a multiple of four 
-- `[S003]` Unnecessary semicolon after a statement (note, semicolons are admissible in comments)
-- `[S004]` At least two spaces before inline comment required
-- `[S005]` TODO found (only within comments and the case does not important) 
-- `[S006]` More than two blank lines used before this line (it must be output for the first non-empty line)
+As a rule, real projects contain lots of different files. 
+At this stage you need to improve the tool to make possible analyzing all python files
+within a specified directory, skipping files of other types.
 
-All of the checks are consistent with the PEP8 style guide. 
-See an example below to better understand the checks.
+All previously implemented checks should work correctly.
+
+Here are two examples below.
 
 If a line contains the same stylistic issue several times (e.g., `[S003]`, `[S005]`), 
 your program must print the information only once. But if a line has issues with different codes, 
