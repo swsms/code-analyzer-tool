@@ -16,7 +16,7 @@ They analyze code and output all the found stylistic and some other issues.
 In this project, you will create a small linter which finds some common stylistic issues in python code.
 This will allow you to understand the general ideas of static code analysis and also better understand python itself.
 
-## First stage description
+## Second stage description
 
 **Prerequisites**: declaring functions, slicing, list comprehensions, while, sorting
 
