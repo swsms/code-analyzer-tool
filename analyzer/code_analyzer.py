@@ -2,7 +2,7 @@ import re
 from os import path
 from typing import List, Optional
 
-from analyzer.contants import CLASS_DECLARATION_REGEX, CLASS_NAME_REGEX
+from analyzer.contants import CLASS_DECLARATION_REGEX, CLASS_NAME_REGEX, FUN_DECLARATION_REGEX, FUN_NAME_REGEX
 from analyzer.utils import (read_file, read_python_files, SourceCodeFile)
 from analyzer.violation import Violation
 
@@ -28,6 +28,9 @@ COMMENT_SIGN = '#'
 
 CLASS_NAME_CODE = 'S007'
 CLASS_NAME_MSG_TEMPLATE = 'Class name \'%s\' should use CamelCase'
+
+FUN_NAME_CODE = 'S007'
+FUN_NAME_MSG_TEMPLATE = 'Function name \'%s\' should use snake_case'
 
 
 def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
@@ -68,9 +71,15 @@ def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
         invalid_class_name = check_invalid_class_name(line)
         if invalid_class_name:
             violations.append(
-                Violation(file_path=path,  line=num,
-                          code=CLASS_NAME_CODE,
+                Violation(file_path=path,  line=num, code=CLASS_NAME_CODE,
                           text=CLASS_NAME_MSG_TEMPLATE % invalid_class_name)
+            )
+
+        invalid_fun_name = check_invalid_fun_name(line)
+        if invalid_fun_name:
+            violations.append(
+                Violation(file_path=path,  line=num, code=FUN_NAME_CODE,
+                          text=FUN_NAME_MSG_TEMPLATE % invalid_fun_name)
             )
 
     violations.extend([
@@ -174,7 +183,7 @@ def is_inside_singleline_string(line: str, target_index: int) -> bool:
 
 
 def check_invalid_class_name(line: str) -> Optional[str]:
-    class_match_obj = re.match(CLASS_DECLARATION_REGEX, line)
+    class_match_obj = re.match(CLASS_DECLARATION_REGEX, line.strip())
     if not class_match_obj:
         return None
 
@@ -183,7 +192,14 @@ def check_invalid_class_name(line: str) -> Optional[str]:
         return class_name
 
 
-# def check_invalid_fun_name(line: str) -> Optional[str]:
+def check_invalid_fun_name(line: str) -> Optional[str]:
+    fun_match_obj = re.match(FUN_DECLARATION_REGEX, line.strip())
+    if not fun_match_obj:
+        return None
+
+    fun_name = fun_match_obj.group(1)
+    if not re.match(FUN_NAME_REGEX, fun_name):
+        return fun_name
 
 
 def sort_violations(violations: List[Violation]) -> List[Violation]:
