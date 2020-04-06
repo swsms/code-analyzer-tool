@@ -1,9 +1,9 @@
+import re
 from os import path
-from typing import List
+from typing import List, Optional
 
-from analyzer.utils import (
-    SourceCodeFile, read_file, read_python_files
-)
+from analyzer.contants import CLASS_DECLARATION_REGEX, CLASS_NAME_REGEX
+from analyzer.utils import (read_file, read_python_files, SourceCodeFile)
 from analyzer.violation import Violation
 
 TOO_LONG_CODE = 'S001'
@@ -26,11 +26,8 @@ TOO_MANY_BLANK_LINES_MSG = 'More than two blank lines used before this line'
 
 COMMENT_SIGN = '#'
 
-#
-#
-# NON ASCII CHARACTER (COLUMN?)
-#
-# check 4 TOO MANY BLANK LINES (3)
+CLASS_NAME_CODE = 'S007'
+CLASS_NAME_MSG_TEMPLATE = 'Class name \'%s\' should use CamelCase'
 
 
 def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
@@ -67,6 +64,14 @@ def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
             violations.append(
                 Violation(file_path=path, line=num,
                           code=TODO_CODE, text=TODO_CODE_MSG))
+
+        invalid_class_name = check_invalid_class_name(line)
+        if invalid_class_name:
+            violations.append(
+                Violation(file_path=path,  line=num,
+                          code=CLASS_NAME_CODE,
+                          text=CLASS_NAME_MSG_TEMPLATE % invalid_class_name)
+            )
 
     violations.extend([
         Violation(file_path=path, line=position,
@@ -166,6 +171,19 @@ def is_inside_singleline_string(line: str, target_index: int) -> bool:
         current_index += 1
 
     return inside_single_quotes or inside_double_quotes
+
+
+def check_invalid_class_name(line: str) -> Optional[str]:
+    class_match_obj = re.match(CLASS_DECLARATION_REGEX, line)
+    if not class_match_obj:
+        return None
+
+    class_name = class_match_obj.group(1)
+    if not re.match(CLASS_NAME_REGEX, class_name):
+        return class_name
+
+
+# def check_invalid_fun_name(line: str) -> Optional[str]:
 
 
 def sort_violations(violations: List[Violation]) -> List[Violation]:
