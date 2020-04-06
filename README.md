@@ -79,5 +79,5 @@ The path to a file with python code is obtained from the standard input as befor
 It is highly recommended that you break down your program code into a set of small functions.
 Otherwise, your code may confuse others.
 
-To simplify the solution, we consider it acceptable if your program will find some false-positive stylistic issues 
+To simplify the solution, we consider it acceptable if your program finds some false-positive stylistic issues 
 within strings, especially multi-lines ('''...''' and """...""").
