@@ -1,10 +1,5 @@
-
-class Person:
-
-    def __init__(self, name: str, age: int):
-        self.name = name
-        self.age = age
-
+class  Person:
+    pass
 
 class user:
 
@@ -13,13 +8,9 @@ class user:
         self.password = password
 
     @staticmethod
-    def print1():
+    def _print1():
         print('q')
 
     @staticmethod
     def Print2():
-        print('q')
-
-    @staticmethod
-    def _print3():
         print('q')

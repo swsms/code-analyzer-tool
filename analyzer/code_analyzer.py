@@ -2,8 +2,13 @@ import re
 from os import path
 from typing import List, Optional
 
-from analyzer.contants import CLASS_DECLARATION_REGEX, CLASS_NAME_REGEX, FUN_DECLARATION_REGEX, FUN_NAME_REGEX
-from analyzer.utils import (read_file, read_python_files, SourceCodeFile)
+from analyzer.contants import (
+    CLASS_DECLARATION_REGEX, CLASS_NAME_REGEX,
+    COMMENT_SIGN, FUN_DECLARATION_REGEX,
+    FUN_NAME_REGEX)
+from analyzer.utils import (
+    read_file, read_python_files, SourceCodeFile
+)
 from analyzer.violation import Violation
 
 TOO_LONG_CODE = 'S001'
@@ -24,12 +29,13 @@ TODO_CODE_MSG = 'TODO found'
 TOO_MANY_BLANK_LINES_CODE = 'S006'
 TOO_MANY_BLANK_LINES_MSG = 'More than two blank lines used before this line'
 
-COMMENT_SIGN = '#'
+TOO_MANY_SPACES_CODE = 'S007'
+TOO_MANY_SPACES_MSG_TEMPLATE = 'Too many spaces after \'%s\''
 
-CLASS_NAME_CODE = 'S007'
+CLASS_NAME_CODE = 'S008'
 CLASS_NAME_MSG_TEMPLATE = 'Class name \'%s\' should use CamelCase'
 
-FUN_NAME_CODE = 'S007'
+FUN_NAME_CODE = 'S009'
 FUN_NAME_MSG_TEMPLATE = 'Function name \'%s\' should use snake_case'
 
 
@@ -68,17 +74,25 @@ def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
                 Violation(file_path=path, line=num,
                           code=TODO_CODE, text=TODO_CODE_MSG))
 
+        construction = check_extra_space(line)
+        if construction:
+            violations.append(
+                Violation(file_path=path, line=num,
+                          code=TOO_MANY_SPACES_CODE,
+                          text=TOO_MANY_SPACES_MSG_TEMPLATE % construction))
+
         invalid_class_name = check_invalid_class_name(line)
         if invalid_class_name:
             violations.append(
-                Violation(file_path=path,  line=num, code=CLASS_NAME_CODE,
-                          text=CLASS_NAME_MSG_TEMPLATE % invalid_class_name)
-            )
+                Violation(file_path=path, line=num,
+                          code=CLASS_NAME_CODE,
+                          text=CLASS_NAME_MSG_TEMPLATE % invalid_class_name))
 
         invalid_fun_name = check_invalid_fun_name(line)
         if invalid_fun_name:
             violations.append(
-                Violation(file_path=path,  line=num, code=FUN_NAME_CODE,
+                Violation(file_path=path, line=num,
+                          code=FUN_NAME_CODE,
                           text=FUN_NAME_MSG_TEMPLATE % invalid_fun_name)
             )
 
@@ -182,12 +196,28 @@ def is_inside_singleline_string(line: str, target_index: int) -> bool:
     return inside_single_quotes or inside_double_quotes
 
 
+def check_extra_space(line: str) -> Optional[str]:
+    class_match_obj = re.match(CLASS_DECLARATION_REGEX, line.strip())
+    if class_match_obj:
+        numbers_of_spaces = len(class_match_obj.group(1))
+        if numbers_of_spaces > 1:
+            return 'class'
+
+    fun_match_obj = re.match(FUN_DECLARATION_REGEX, line.strip())
+    if fun_match_obj:
+        numbers_of_spaces = len(fun_match_obj.group(1))
+        if numbers_of_spaces > 1:
+            return 'def'
+
+    return None
+
+
 def check_invalid_class_name(line: str) -> Optional[str]:
     class_match_obj = re.match(CLASS_DECLARATION_REGEX, line.strip())
     if not class_match_obj:
         return None
 
-    class_name = class_match_obj.group(1)
+    class_name = class_match_obj.group(2)
     if not re.match(CLASS_NAME_REGEX, class_name):
         return class_name
 
@@ -197,7 +227,7 @@ def check_invalid_fun_name(line: str) -> Optional[str]:
     if not fun_match_obj:
         return None
 
-    fun_name = fun_match_obj.group(1)
+    fun_name = fun_match_obj.group(2)
     if not re.match(FUN_NAME_REGEX, fun_name):
         return fun_name
 

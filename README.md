@@ -16,68 +16,83 @@ They analyze code and output all the found stylistic and some other issues.
 In this project, you will create a small linter which finds some common stylistic issues in python code.
 This will allow you to understand the general ideas of static code analysis and also better understand python itself.
 
-## Third stage description
+## Fourth stage description
 
-**Prerequisites**: oop, directories
+**Prerequisites**: regexps
 
-As a rule, real projects contain lots of different files. 
-At this stage you need to improve the tool to make possible analyzing all python files
-within a specified directory, skipping files of other types.
+As many people say, naming things is one of the hardest problems in programming.
+At the same time, good names make a program more readable and uniform.
 
+At this stage, you need to improve your code analyzer to check 
+names of all functions and classes in a given program according to PEP8.
+
+You need to add the following three checks:
+- `[S007]` Too many spaces after '%constuction_name%' (def or class)
+- `[S008]` Class name '%class_name%' should use CamelCase
+- `[S009]` Function name '%function_name%' should use snake_case
+
+You can use other messages, but check codes must be exactly the same.
 All previously implemented checks should work correctly.
 
-Here are two examples below.
-
-1) If only a single file is specified as the input:
-
-Input example:
-```
-/path/to/file/script.py
-```
-
-Found issues: 
+To simplify the problem, we suppose that classes are always written like the following examples:
 
 ```
-/path/to/file/script.py: Line 1: S004 At least two spaces before inline comment required
-/path/to/file/script.py: Line 2: S003 Unnecessary semicolon
-/path/to/file/script.py: Line 3: S001 Too long line
-/path/to/file/script.py: Line 3: S003 Unnecessary semicolon
-/path/to/file/script.py: Line 6: S001 Too long line
-/path/to/file/script.py: Line 11: S006 More than two blank lines used before this line
-/path/to/file/script.py: Line 13: S003 Unnecessary semicolon
-/path/to/file/script.py: Line 13: S004 At least two spaces before inline comment required
-/path/to/file/script.py: Line 13: S005 TODO found
+# a simple class
+class MyClass:
+    pass
+    
+# a class based on inheritance
+class MyClass(AnotherClass):
+    pass
 ```
 
-2) If the input path is a directory, the output should contain all python files from it.
-
-Input example:
-```
-/path/to/project
-```
-
-Found issues: 
+In reality it's possible to declare a class in this way:
 
 ```
-/path/to/project/__init__.py: Line 1: S001 Too long line
-/path/to/project/sctipt1.py: Line 1: S004 At least two spaces before inline comment required
-/path/to/project/sctipt1.py: Line 2: S003 Unnecessary semicolon
-/path/to/project/sctipt2.py: Line 1: S004 At least two spaces before inline comment required
-/path/to/project/sctipt2.py: Line 3: S001 Too long line
-/path/to/project/somedir/script.py: Line 3: S001 Too long line
-/path/to/project/test.py: Line 3: Line 13: S003 Unnecessary semicolon
+class \
+        S:
+    pass
 ```
 
-All output lines must be sorted according to the file name (lexicographically), line number and issue code.
+But it is not a common way to declare classes and you can skip it.
 
-As before, If a line contains the same stylistic issue several times (e.g., `[S003]`, `[S005]`), 
-your program must print the information only once. But if a line has issues with different codes, 
-they should be printed in the sorted order.
+Another assumption that functions are always declared like this one:
 
-The path to a file with python code is obtained from the standard input as before.
+```
+def do_magic():
+    pass
+```
 
-It is highly recommended that you break down your program code into a set of small functions.
-Otherwise, your code may confuse others.
+Functions that starts and ends with underscores (`__fun`, `__init__`) must be admissible too.
 
-To simplify the solution, we consider it acceptable if your program will find some false-positive stylistic issues 
-within strings, especially multi-lines ('''...''' and """...""").
+Here is an input code example:
+
+```
+class  Person:
+    pass
+
+class user:
+
+    def __init__(self, login: str, password: str):
+        self.login = login
+        self.password = password
+
+    @staticmethod
+    def _print1():
+        print('q')
+
+    @staticmethod
+    def Print2():
+        print('q')
+```
+
+The expected output for this code is the following:
+```
+/path/to/file/script.py: Line 1: S007 Too many spaces after 'class'
+/path/to/file/script.py: Line 4: S008 Class name 'user' should use CamelCase
+/path/to/file/script.py: Line 15: S009 Function name 'Print2' should use snake_case
+```
+
+It is as acceptable if your program finds some false-positive stylistic issues 
+within strings, especially multi-lines ('''...''' and """..."""). 
+But you can improve this case if you want.
