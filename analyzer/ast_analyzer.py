@@ -10,10 +10,10 @@ from analyzer.analyzers.contants import (
 )
 from analyzer.violation import Violation
 
+"""
+Additional theory: https://greentreesnakes.readthedocs.io/en/latest/manipulating.html
+"""
 
-# At this stage, we are going to check variable names using the AST module.
-# You can rewrite some of the checks added in the previous stages using this approach.
-# It would be especially convenient for checking the names of functions and classes.
 
 def analyze_script_using_ast(file_path: str) -> List[Violation]:
     with open(file_path) as script:
@@ -28,12 +28,12 @@ def find_violations_in_ast_tree(tree: ast.AST, file_path: str) -> List[Violation
     for node in ast.walk(tree):
         for child in ast.iter_child_nodes(node):
             child.parent = node
-        violations += check_node(node, file_path)
+        violations += analyze_node(node, file_path)
     return violations
 
 
-# TODO rewrite it using polymorphism
-def check_node(node: ast.AST, file_path: str) -> List[Violation]:
+# TODO rewrite it using polymorphism (NodeVisitor) or decorators???
+def analyze_node(node: ast.AST, file_path: str) -> List[Violation]:
     if isinstance(node, ast.FunctionDef):
         fun_name = node.name
         if not re.match(FUN_NAME_REGEX, fun_name):
