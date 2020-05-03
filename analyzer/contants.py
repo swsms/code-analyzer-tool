@@ -8,6 +8,8 @@ FUN_NAME_REGEX = r'(_*[a-z0-9_])'
 
 FUN_ARG_VAR_NAME_REGEX = r'(_*[a-z0-9_])'
 
+MAX_LINE_LENGTH = 79
+
 TOO_LONG_CODE = 'S001'
 TOO_LONG_LINE_MSG = 'Too long line'
 

@@ -2,13 +2,12 @@ import ast
 import re
 from typing import List
 
-import astpretty
-
 from analyzer.contants import (
     CLASS_NAME_CODE, CLASS_NAME_MSG_TEMPLATE, CLASS_NAME_REGEX, FUN_ARG_NAME_CODE,
     FUN_ARG_NAME_MSG_TEMPLATE, FUN_ARG_VAR_NAME_REGEX, FUN_NAME_CODE, FUN_NAME_MSG_TEMPLATE,
     FUN_NAME_REGEX, FUN_VARIABLE_NAME_CODE, FUN_VARIABLE_NAME_TEMPLATE,
-    MUTABLE_DEFAULT_ARGUMENT_CODE, MUTABLE_DEFAULT_NAME_TEMPLATE)
+    MUTABLE_DEFAULT_ARGUMENT_CODE, MUTABLE_DEFAULT_NAME_TEMPLATE
+)
 from analyzer.violation import Violation
 
 
@@ -54,7 +53,6 @@ def check_node(node: ast.AST, file_path: str) -> List[Violation]:
     if isinstance(node, ast.arguments):
         violations = []
         args = node.args
-        astpretty.pprint(node)
         for arg in args:
             if not re.match(FUN_ARG_VAR_NAME_REGEX, arg.arg):
                 violations.append(
