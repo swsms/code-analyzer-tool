@@ -4,14 +4,16 @@ from typing import List, Tuple
 SourceCodeFile = Tuple[str, List[str]]
 
 
-def read_python_files(directory: str) -> List[SourceCodeFile]:
+def get_file_names(directory: str) -> List[str]:
     paths = []
-
     for (path, _, filenames) in os.walk(directory):
         for filename in filenames:
             if filename.endswith('.py'):
                 paths.append(os.path.join('..', path, filename))
+    return paths
 
+
+def read_python_files(paths: List[str]) -> List[SourceCodeFile]:
     return [read_file(path) for path in paths]
 
 
