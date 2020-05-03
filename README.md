@@ -1,7 +1,7 @@
 # code-analyzer-tool
-This is just a draft for a new project on Hyperskill.
+This is just a draft for a new education project on Hyperskill. The published project may be slightly different, so there is no ready-made solution in this repository :)
 
-Please, do not use it in production. A better choice would be pylint, flake8 or something else.
+**Please, do not use this tool in production. A better choice would be flake8, pylint or something else.**
 
 ## Motivation
 
