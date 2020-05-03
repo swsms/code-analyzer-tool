@@ -2,7 +2,7 @@ import ast
 import re
 from typing import List
 
-from analyzer.contants import (
+from analyzer.analyzers.contants import (
     CLASS_NAME_CODE, CLASS_NAME_MSG_TEMPLATE, CLASS_NAME_REGEX, FUN_ARG_NAME_CODE,
     FUN_ARG_NAME_MSG_TEMPLATE, FUN_ARG_VAR_NAME_REGEX, FUN_NAME_CODE, FUN_NAME_MSG_TEMPLATE,
     FUN_NAME_REGEX, FUN_VARIABLE_NAME_CODE, FUN_VARIABLE_NAME_TEMPLATE,

@@ -10,6 +10,9 @@ FUN_ARG_VAR_NAME_REGEX = r'(_*[a-z0-9_])'
 
 MAX_LINE_LENGTH = 79
 
+DEFAULT_CODE = 'OK'
+DEFAULT_MSG = ''
+
 TOO_LONG_CODE = 'S001'
 TOO_LONG_LINE_MSG = 'Too long line'
 
