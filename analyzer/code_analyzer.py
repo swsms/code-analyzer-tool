@@ -38,6 +38,12 @@ CLASS_NAME_MSG_TEMPLATE = 'Class name \'%s\' should use CamelCase'
 FUN_NAME_CODE = 'S009'
 FUN_NAME_MSG_TEMPLATE = 'Function name \'%s\' should use snake_case'
 
+FUN_ARG_NAME_CODE = 'S010'
+FUN_ARG_NAME_MSG_TEMPLATE = 'Argument name \'%s\' should be snake_case'
+
+FUN_VARIABLE_NAME_CODE = 'S011'
+FUN_VARIABLE_NAME_TEMPLATE = 'Variable \'%s\' in function should be snake_case'
+
 
 def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
     violations = []
