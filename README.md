@@ -75,3 +75,6 @@ The expected output for this code is the following:
 
 You can also use AST to rewrite some of the checks added before.
 It would be especially convenient for checking the names of functions and classes.
+
+If you want to continue improving this project, you can implement all of the standard PEP8 checks, 
+display column numbers, and also allow disabling some of the checks using command-line arguments.
