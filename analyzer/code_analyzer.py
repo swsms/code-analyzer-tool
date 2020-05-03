@@ -2,49 +2,20 @@ import re
 from os import path
 from typing import List, Optional
 
+from analyzer.ast_analyzer import analyze_script_using_ast
 from analyzer.contants import (
-    CLASS_DECLARATION_REGEX, CLASS_NAME_REGEX,
-    COMMENT_SIGN, FUN_DECLARATION_REGEX,
-    FUN_NAME_REGEX)
-from analyzer.utils import (
-    read_file, read_python_files, SourceCodeFile
+    CLASS_DECLARATION_REGEX, CLASS_NAME_REGEX, COMMENT_SIGN,
+    FUN_DECLARATION_REGEX, FUN_NAME_REGEX, INDENTATION_CODE, INDENTATION_MSG,
+    TODO_CODE, TODO_CODE_MSG, TOO_LONG_CODE, TOO_LONG_LINE_MSG,
+    TOO_MANY_BLANK_LINES_CODE, TOO_MANY_BLANK_LINES_MSG,
+    TOO_MANY_SPACES_CODE, TOO_MANY_SPACES_MSG_TEMPLATE, TWO_SPACES_BEFORE_COMMENT_CODE,
+    TWO_SPACES_BEFORE_COMMENT_MSG, UNNECESSARY_SEMICOLON_CODE, UNNECESSARY_SEMICOLON_MSG
 )
+from analyzer.file_utils import (get_file_names, read_file, read_python_files, SourceCodeFile)
 from analyzer.violation import Violation
 
-TOO_LONG_CODE = 'S001'
-TOO_LONG_LINE_MSG = 'Too long line'
 
-INDENTATION_CODE = 'S002'
-INDENTATION_MSG = 'Indentation is not a multiple of four'
-
-UNNECESSARY_SEMICOLON_CODE = 'S003'
-UNNECESSARY_SEMICOLON_MSG = 'Unnecessary semicolon'
-
-TWO_SPACES_BEFORE_COMMENT_CODE = 'S004'
-TWO_SPACES_BEFORE_COMMENT_MSG = 'At least two spaces before inline comment required'
-
-TODO_CODE = 'S005'
-TODO_CODE_MSG = 'TODO found'
-
-TOO_MANY_BLANK_LINES_CODE = 'S006'
-TOO_MANY_BLANK_LINES_MSG = 'More than two blank lines used before this line'
-
-TOO_MANY_SPACES_CODE = 'S007'
-TOO_MANY_SPACES_MSG_TEMPLATE = 'Too many spaces after \'%s\''
-
-CLASS_NAME_CODE = 'S008'
-CLASS_NAME_MSG_TEMPLATE = 'Class name \'%s\' should use CamelCase'
-
-FUN_NAME_CODE = 'S009'
-FUN_NAME_MSG_TEMPLATE = 'Function name \'%s\' should use snake_case'
-
-FUN_ARG_NAME_CODE = 'S010'
-FUN_ARG_NAME_MSG_TEMPLATE = 'Argument name \'%s\' should be snake_case'
-
-FUN_VARIABLE_NAME_CODE = 'S011'
-FUN_VARIABLE_NAME_TEMPLATE = 'Variable \'%s\' in function should be snake_case'
-
-
+# TODO rewrite it using polymorphism
 def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
     violations = []
 
@@ -86,21 +57,6 @@ def analyze_code_lines(file: SourceCodeFile) -> List[Violation]:
                 Violation(file_path=path, line=num,
                           code=TOO_MANY_SPACES_CODE,
                           text=TOO_MANY_SPACES_MSG_TEMPLATE % construction))
-
-        invalid_class_name = check_invalid_class_name(line)
-        if invalid_class_name:
-            violations.append(
-                Violation(file_path=path, line=num,
-                          code=CLASS_NAME_CODE,
-                          text=CLASS_NAME_MSG_TEMPLATE % invalid_class_name))
-
-        invalid_fun_name = check_invalid_fun_name(line)
-        if invalid_fun_name:
-            violations.append(
-                Violation(file_path=path, line=num,
-                          code=FUN_NAME_CODE,
-                          text=FUN_NAME_MSG_TEMPLATE % invalid_fun_name)
-            )
 
     violations.extend([
         Violation(file_path=path, line=position,
@@ -239,9 +195,10 @@ def check_invalid_fun_name(line: str) -> Optional[str]:
 
 
 def sort_violations(violations: List[Violation]) -> List[Violation]:
-    return sorted(violations, key=lambda violation: [violation.file_path,
-                                                     violation.line,
-                                                     violation.code])
+    return sorted(violations,
+                  key=lambda violation: [violation.file_path,
+                                         violation.line,
+                                         violation.code])
 
 
 def print_violations(violations: List[Violation]) -> None:
@@ -256,12 +213,16 @@ def main():
         print('ERROR: The path does not exist!')
         return
 
+    violations = []
     if path.isfile(file_path):
         source_code_files = [read_file(file_path)]
+        violations.extend(analyze_script_using_ast(file_path))
     else:
-        source_code_files = read_python_files(file_path)
+        paths = get_file_names(file_path)
+        for file_path in paths:
+            violations.extend(analyze_script_using_ast(file_path))
+        source_code_files = read_python_files(paths)
 
-    violations = []
     for file in source_code_files:
         violations.extend(analyze_code_lines(file))
 

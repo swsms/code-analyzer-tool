@@ -18,7 +18,7 @@ This will allow you to understand the general ideas of static code analysis and 
 
 ## Fourth stage description
 
-**Prerequisites**: regexps
+**Prerequisites**: tree travels, ast
 
 As many people say, naming things is one of the hardest problems in programming.
 At the same time, good names make a program more readable and uniform.

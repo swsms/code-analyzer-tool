@@ -8,7 +8,7 @@ def some_fun(ARG: str, test: str):
     pass; # Todo something
 
 
-class SomeClass:
+class fdsdf:
     sdfsdf = 'qwe'
 
     def some_fun(self):
