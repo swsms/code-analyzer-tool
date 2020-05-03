@@ -3,7 +3,7 @@ from os import path
 from typing import List
 
 from analyzer.analyzers.analyze_lines import analyze_code_lines
-from analyzer.ast_analyzer import analyze_script_using_ast
+from analyzer.analyzers.ast_analyzer import analyze_script_using_ast
 from analyzer.file_utils import (get_file_names, read_file, read_python_files)
 from analyzer.violation import Violation
 
