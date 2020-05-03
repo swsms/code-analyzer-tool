@@ -21,4 +21,3 @@ def read_file(file_path: str) -> SourceCodeFile:
     with open(file_path, mode='r') as file:
         return (file_path,
                 [line.rstrip() for line in file.readlines()])
-

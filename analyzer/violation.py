@@ -7,4 +7,3 @@ class Violation:
     line: int
     code: str
     text: str = ''
-
