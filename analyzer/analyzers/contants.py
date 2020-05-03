@@ -23,7 +23,8 @@ UNNECESSARY_SEMICOLON_CODE = 'S003'
 UNNECESSARY_SEMICOLON_MSG = 'Unnecessary semicolon'
 
 TWO_SPACES_BEFORE_COMMENT_CODE = 'S004'
-TWO_SPACES_BEFORE_COMMENT_MSG = 'At least two spaces before inline comment required'
+TWO_SPACES_BEFORE_COMMENT_MSG = ('At least two spaces before '
+                                 'inline comment required')
 
 TODO_CODE = 'S005'
 TODO_CODE_MSG = 'TODO found'
