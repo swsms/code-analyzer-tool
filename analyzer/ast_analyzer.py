@@ -2,11 +2,13 @@ import ast
 import re
 from typing import List
 
+import astpretty
+
 from analyzer.contants import (
     CLASS_NAME_CODE, CLASS_NAME_MSG_TEMPLATE, CLASS_NAME_REGEX, FUN_ARG_NAME_CODE,
     FUN_ARG_NAME_MSG_TEMPLATE, FUN_ARG_VAR_NAME_REGEX, FUN_NAME_CODE, FUN_NAME_MSG_TEMPLATE,
-    FUN_NAME_REGEX, FUN_VARIABLE_NAME_CODE, FUN_VARIABLE_NAME_TEMPLATE
-)
+    FUN_NAME_REGEX, FUN_VARIABLE_NAME_CODE, FUN_VARIABLE_NAME_TEMPLATE,
+    MUTABLE_DEFAULT_ARGUMENT_CODE, MUTABLE_DEFAULT_NAME_TEMPLATE)
 from analyzer.violation import Violation
 
 
@@ -50,12 +52,28 @@ def check_node(node: ast.AST, file_path: str) -> List[Violation]:
             )
         return violations
     if isinstance(node, ast.arguments):
+        violations = []
         args = node.args
+        astpretty.pprint(node)
         for arg in args:
             if not re.match(FUN_ARG_VAR_NAME_REGEX, arg.arg):
-                return [Violation(file_path=file_path, line=arg.lineno,
-                                  code=FUN_ARG_NAME_CODE,
-                                  text=FUN_ARG_NAME_MSG_TEMPLATE % arg.arg)]
+                violations.append(
+                    Violation(file_path=file_path, line=arg.lineno,
+                              code=FUN_ARG_NAME_CODE,
+                              text=FUN_ARG_NAME_MSG_TEMPLATE % arg.arg)
+                )
+        if node.defaults:
+            mutable_defaults = {ast.List, ast.Dict, ast.Set}
+            for default in node.defaults:
+                for mutable_default in mutable_defaults:
+                    if isinstance(default, mutable_default):
+                        violations.append(
+                            Violation(file_path=file_path, line=default.lineno,
+                                      code=MUTABLE_DEFAULT_ARGUMENT_CODE,
+                                      text=MUTABLE_DEFAULT_NAME_TEMPLATE)
+                        )
+                        break
+        return violations
     if isinstance(node, ast.Assign):
         if isinstance(node.parent, ast.FunctionDef):
             fields = node.targets[0]

@@ -1,3 +1,13 @@
+COMMENT_SIGN = '#'
+
+CLASS_DECLARATION_REGEX = r'class(\s+)(\w+):'
+CLASS_NAME_REGEX = r'_?[A-Z][a-zA-Z0-9]*'
+
+FUN_DECLARATION_REGEX = r'def(\s+)(\w+)'
+FUN_NAME_REGEX = r'(_*[a-z0-9_])'
+
+FUN_ARG_VAR_NAME_REGEX = r'(_*[a-z0-9_])'
+
 TOO_LONG_CODE = 'S001'
 TOO_LONG_LINE_MSG = 'Too long line'
 
@@ -31,12 +41,5 @@ FUN_ARG_NAME_MSG_TEMPLATE = 'Argument name \'%s\' should be snake_case'
 FUN_VARIABLE_NAME_CODE = 'S011'
 FUN_VARIABLE_NAME_TEMPLATE = 'Variable \'%s\' in function should be snake_case'
 
-COMMENT_SIGN = '#'
-
-CLASS_DECLARATION_REGEX = r'class(\s+)(\w+):'
-CLASS_NAME_REGEX = r'_?[A-Z][a-zA-Z0-9]*'
-
-FUN_DECLARATION_REGEX = r'def(\s+)(\w+)'
-FUN_NAME_REGEX = r'(_*[a-z0-9_])'
-
-FUN_ARG_VAR_NAME_REGEX = r'(_*[a-z0-9_])'
+MUTABLE_DEFAULT_ARGUMENT_CODE = 'S012'
+MUTABLE_DEFAULT_NAME_TEMPLATE = 'Default argument value is mutable'
