@@ -72,16 +72,4 @@ for node in ast.walk(tree):
 for violation in violations:
     print(violation)
 
-#
-# tree = ast.parse(script_text)
-# # astpretty.pprint(tree)
-#
-# for statement in ast.walk(tree):
-#     if not isinstance(statement, ast.arguments):
-#         continue
-#     astpretty.pprint(statement)
-#     # print(statement.name)
-#     print(statement.args)
-
-
 
