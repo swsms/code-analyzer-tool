@@ -12,7 +12,8 @@ Fortunately, there are special tools called static code analyzers (pylint, flake
 that your code matches all the standards and recommendations. 
 The tools analyze your code and output all the found stylistic and other issues.
 
-In this project, you will create a small static analyzer tool which finds a set of common stylistic issues in python code. It allows you to understand general ideas of the static code analysis and deepen your python knowledge as well.
+In this project, you will create a small static analyzer tool which finds a set of common stylistic issues in python code. 
+It allows you to understand general ideas of the static code analysis and deepen your python knowledge as well.
 
 ## First stage description
 
@@ -62,6 +63,6 @@ Line 5: S001 Too long line
 ```
 The order must always be from the first to last line.
 
-Your program can output another message instead of Too long line. 
+Your program can output another `message` instead of Too `long line`. 
 The rest part of the output must exactly match the provided example. 
-In this code S001, S means a stylistic issue, and 001 is the internal number of the issue.
+In this code S001, S means a stylistic issue, and `001` is the internal number of the issue.
