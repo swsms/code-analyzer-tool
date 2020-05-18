@@ -6,21 +6,21 @@ Please, do not use it in production. A better choice would be pylint, flake8 or 
 ## Motivation
 
 We really love python, and we also love to write beautiful and expressive code using it. 
-One way to achieve this is to follow the PEP8 specification and best practices recommended by the python community.
-But, this is not always easy, especially for beginners.
+One way to achieve this is to follow the PEP8 specification and best practices recommended by the python community. 
+But, this is not always easy, especially for beginners. 
+Fortunately, there are special tools called static code analyzers (pylint, flake8, etc) which can automatically verify 
+that your code matches all the standards and recommendations. 
+The tools analyze your code and output all the found stylistic and other issues.
 
-Fortunately, there are special tools called linters which automatically verify that code matches all the standards 
-and recommendations. Well-known examples of such tools are pylint and flake8. 
-They analyze code and output all the found stylistic and some other issues.
-
-In this project, you will create a small linter which finds some common stylistic issues in python code.
-This will allow you to understand the general ideas of static code analysis and also better understand python itself.
+In this project, you will create a small static analyzer tool which finds a set of common stylistic issues in python code. It allows you to understand general ideas of the static code analysis and deepen your python knowledge as well.
 
 ## First stage description
 
 **Prerequisites**: variables, print, input, conditions, for, split, enumerate(?), reading files
 
-At the first stage, your program should read python code from a file and perform only a single check: 
+
+
+At this moment, your program must read python code from a specified file and perform only a single check: 
 lines in the code must not be longer than 79 characters (PEP8!). 
 The path to a file is obtained from the standard input.
 
@@ -64,5 +64,6 @@ Line 5: S001 Too long line
 ```
 The order must always be from the first to last line.
 
-You can use another `message` instead of `Too long line`, but everything else must exactly match the example.
-In our code `S001`, `S` means a stylistic issue, and `001` is the internal number of the issue.
+Your program can output another message instead of Too long line. 
+The rest part of the output must exactly match the provided example. 
+In this code S001, S means a stylistic issue, and 001 is the internal number of the issue.
