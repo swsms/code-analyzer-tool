@@ -1,9 +1,8 @@
+import sys
 from os import path
 from typing import List
 
-from analyzer.utils import (
-    SourceCodeFile, read_file, read_python_files
-)
+from analyzer.utils import (read_file, read_python_files, SourceCodeFile)
 from analyzer.violation import Violation
 
 TOO_LONG_CODE = 'S001'
@@ -181,7 +180,9 @@ def print_violations(violations: List[Violation]) -> None:
 
 
 def main():
-    file_path = input()
+    args = sys.argv
+    file_path = args[1]
+
     if not path.exists(file_path):
         print('ERROR: The path does not exist!')
         return

@@ -6,38 +6,38 @@ Please, do not use it in production. A better choice would be pylint, flake8 or 
 ## Motivation
 
 We really love python, and we also love to write beautiful and expressive code using it. 
-One way to achieve this is to follow the PEP8 specification and best practices recommended by the python community.
-But, this is not always easy, especially for beginners.
+One way to achieve this is to follow the PEP8 specification and best practices recommended by the python community. 
+But, this is not always easy, especially for beginners. 
+Fortunately, there are special tools called static code analyzers (pylint, flake8, etc) which can automatically verify 
+that your code matches all the standards and recommendations. 
+The tools analyze your code and output all the found stylistic and other issues.
 
-Fortunately, there are special tools called linters which automatically verify that code matches all the standards 
-and recommendations. Well-known examples of such tools are pylint and flake8. 
-They analyze code and output all the found stylistic and some other issues.
-
-In this project, you will create a small linter which finds some common stylistic issues in python code.
-This will allow you to understand the general ideas of static code analysis and also better understand python itself.
+In this project, you will create a small static analyzer tool which finds a set of common stylistic issues in python code. 
+It allows you to understand general ideas of the static code analysis and deepen your python knowledge as well.
 
 ## Third stage description
 
 **Prerequisites**: oop, directories
 
-As a rule, real projects contain lots of different files. 
-At this stage you need to improve the tool to make possible analyzing all python files
-within a specified directory, skipping files of other types.
+As a rule, real projects contain more than a single file. 
+At this stage you need to improve your program to make possible analyzing all python files inside a specified directory.
+Other files must be skipped.
 
-All previously implemented checks should work correctly.
+You also need to change the input format. Now, instead of reading the path from the standard input,
+it must be obtained as a command line argument.
 
-Here are two examples below.
+```
+> python code_analyzer.py directory-or-file
+```
+
+It is important, that all the checks implemented on the previous stages should work correctly.
+
+Here are three examples below.
 
 1) If only a single file is specified as the input:
 
-Input example:
 ```
-/path/to/file/script.py
-```
-
-Found issues: 
-
-```
+> python code_analyzer.py /path/to/file/script.py
 /path/to/file/script.py: Line 1: S004 At least two spaces before inline comment required
 /path/to/file/script.py: Line 2: S003 Unnecessary semicolon
 /path/to/file/script.py: Line 3: S001 Too long line
@@ -49,16 +49,10 @@ Found issues:
 /path/to/file/script.py: Line 13: S005 TODO found
 ```
 
-2) If the input path is a directory, the output should contain all python files from it.
-
-Input example:
-```
-/path/to/project
-```
-
-Found issues: 
+2) If the input path is a directory, the output should contain all python files from it:
 
 ```
+> python code_analyzer.py /path/to/project
 /path/to/project/__init__.py: Line 1: S001 Too long line
 /path/to/project/sctipt1.py: Line 1: S004 At least two spaces before inline comment required
 /path/to/project/sctipt1.py: Line 2: S003 Unnecessary semicolon
