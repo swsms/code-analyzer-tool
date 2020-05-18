@@ -18,8 +18,6 @@ In this project, you will create a small static analyzer tool which finds a set 
 
 **Prerequisites**: variables, print, input, conditions, for, split, enumerate(?), reading files
 
-
-
 At this moment, your program must read python code from a specified file and perform only a single check: 
 lines in the code must not be longer than 79 characters (PEP8!). 
 The path to a file is obtained from the standard input.
