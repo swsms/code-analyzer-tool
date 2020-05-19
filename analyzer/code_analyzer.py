@@ -181,6 +181,11 @@ def print_violations(violations: List[Violation]) -> None:
 
 def main():
     args = sys.argv
+
+    if len(args) < 2:
+        print('ERROR: Specify the path to a file or directory')
+        return
+
     file_path = args[1]
 
     if not path.exists(file_path):
