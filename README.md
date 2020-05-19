@@ -37,7 +37,7 @@ All previously implemented checks should work correctly as well as reading from 
 
 To simplify the problem, you only need to check whether the mutable value is directly assigned to an argument.
 
-```
+```python
 def fun1(test=[]):  # default argument value is mutable
     pass
 
