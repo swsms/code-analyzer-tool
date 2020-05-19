@@ -6,15 +6,14 @@ This is just a draft for a new education project on Hyperskill. The published pr
 ## Motivation
 
 We really love python, and we also love to write beautiful and expressive code using it. 
-One way to achieve this is to follow the PEP8 specification and best practices recommended by the python community.
-But, this is not always easy, especially for beginners.
+One way to achieve this is to follow the PEP8 specification and best practices recommended by the python community. 
+But, this is not always easy, especially for beginners. 
+Fortunately, there are special tools called static code analyzers (pylint, flake8, etc) which can automatically verify 
+that your code matches all the standards and recommendations. 
+The tools analyze your code and output all the found stylistic and other issues.
 
-Fortunately, there are special tools called linters which automatically verify that code matches all the standards 
-and recommendations. Well-known examples of such tools are pylint and flake8. 
-They analyze code and output all the found stylistic and some other issues.
-
-In this project, you will create a small linter which finds some common stylistic issues in python code.
-This will allow you to understand the general ideas of static code analysis and also better understand python itself.
+In this project, you will create a small static analyzer tool which finds a set of common stylistic issues in python code. 
+It allows you to understand general ideas of the static code analysis and deepen your python knowledge as well.
 
 ## Fifth stage description
 
@@ -76,5 +75,7 @@ The expected output for this code is the following:
 You can also use AST to rewrite some of the checks added before.
 It would be especially convenient for checking the names of functions and classes.
 
-If you want to continue improving this project, you can implement all of the standard PEP8 checks, 
-display column numbers, and also allow disabling some of the checks using command-line arguments.
+If you would like to continue improving this project, then you may:
+- implement all of the standard PEP8 checks, 
+- display column numbers,
+- disabling some of the checks via command-line arguments.

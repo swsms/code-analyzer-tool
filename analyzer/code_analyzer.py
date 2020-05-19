@@ -39,7 +39,14 @@ def analyze(file_path: str) -> List[Violation]:
 
 
 def main():
-    file_path = input()
+    args = sys.argv
+
+    if len(args) < 2:
+        print('ERROR: Specify the path to a file or directory')
+        return 1
+
+    file_path = args[1]
+
     if not path.exists(file_path):
         print('ERROR: The path does not exist!')
         return 1
